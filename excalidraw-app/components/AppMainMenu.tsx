@@ -2,6 +2,9 @@ import {
   loginIcon,
   ExcalLogo,
   eyeIcon,
+  GithubIcon,
+  XBrandIcon,
+  DiscordIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import { useI18n } from "@excalidraw/excalidraw/i18n";
 import { MainMenu } from "@excalidraw/excalidraw/index";
@@ -16,6 +19,74 @@ import { isExcalidrawPlusSignedUser } from "../app_constants";
 
 import { saveDebugState } from "./DebugCanvas";
 
+const AppMenuLinks = () => {
+  const { t } = useI18n();
+  const plusHref = `${
+    import.meta.env.VITE_APP_PLUS_LP
+  }/plus?utm_source=excalidraw&utm_medium=app&utm_content=hamburger`;
+  const authHref = `${import.meta.env.VITE_APP_PLUS_APP}${
+    isExcalidrawPlusSignedUser ? "" : "/sign-up"
+  }?utm_source=signin&utm_medium=app&utm_content=hamburger`;
+
+  return (
+    <MainMenu.ItemCustom
+      className="app-main-menu-links"
+      data-testid="app-main-menu-links"
+    >
+      <a
+        href={plusHref}
+        target="_blank"
+        rel="noopener"
+        className="app-main-menu-links__item"
+        aria-label="Excalidraw+"
+        title="Excalidraw+"
+      >
+        {ExcalLogo}
+      </a>
+      <a
+        href="https://github.com/excalidraw/excalidraw"
+        target="_blank"
+        rel="noopener"
+        className="app-main-menu-links__item"
+        aria-label="GitHub"
+        title="GitHub"
+      >
+        {GithubIcon}
+      </a>
+      <a
+        href="https://x.com/excalidraw"
+        target="_blank"
+        rel="noopener"
+        className="app-main-menu-links__item"
+        aria-label="Follow us on X"
+        title="Follow us on X"
+      >
+        {XBrandIcon}
+      </a>
+      <a
+        href="https://discord.gg/UexuTaE"
+        target="_blank"
+        rel="noopener"
+        className="app-main-menu-links__item"
+        aria-label="Discord chat"
+        title="Discord chat"
+      >
+        {DiscordIcon}
+      </a>
+      <a
+        href={authHref}
+        target="_blank"
+        rel="noopener"
+        className="app-main-menu-links__item app-main-menu-links__item--accent"
+        aria-label={isExcalidrawPlusSignedUser ? t("labels.signIn") : t("labels.signUp")}
+        title={isExcalidrawPlusSignedUser ? t("labels.signIn") : t("labels.signUp")}
+      >
+        {loginIcon}
+      </a>
+    </MainMenu.ItemCustom>
+  );
+};
+
 export const AppMainMenu: React.FC<{
   onCollabDialogOpen: () => any;
   isCollaborating: boolean;
@@ -26,7 +97,9 @@ export const AppMainMenu: React.FC<{
   const { t } = useI18n();
   return (
     <MainMenu>
+      <MainMenu.DefaultItems.NewFile />
       <MainMenu.DefaultItems.LoadScene />
+      <MainMenu.DefaultItems.RecentFiles />
       <MainMenu.DefaultItems.SaveToActiveFile />
       <MainMenu.DefaultItems.Export />
       <MainMenu.DefaultItems.SaveAsImage />
@@ -41,25 +114,6 @@ export const AppMainMenu: React.FC<{
       <MainMenu.DefaultItems.Help />
       <MainMenu.DefaultItems.ClearCanvas />
       <MainMenu.Separator />
-      <MainMenu.ItemLink
-        icon={ExcalLogo}
-        href={`${
-          import.meta.env.VITE_APP_PLUS_LP
-        }/plus?utm_source=excalidraw&utm_medium=app&utm_content=hamburger`}
-        className=""
-      >
-        Excalidraw+
-      </MainMenu.ItemLink>
-      <MainMenu.DefaultItems.Socials />
-      <MainMenu.ItemLink
-        icon={loginIcon}
-        href={`${import.meta.env.VITE_APP_PLUS_APP}${
-          isExcalidrawPlusSignedUser ? "" : "/sign-up"
-        }?utm_source=signin&utm_medium=app&utm_content=hamburger`}
-        className="highlighted"
-      >
-        {isExcalidrawPlusSignedUser ? t("labels.signIn") : t("labels.signUp")}
-      </MainMenu.ItemLink>
       {isDevEnv() && (
         <MainMenu.Item
           icon={eyeIcon}
@@ -84,6 +138,8 @@ export const AppMainMenu: React.FC<{
         <LanguageList style={{ width: "100%" }} />
       </MainMenu.ItemCustom>
       <MainMenu.DefaultItems.ChangeCanvasBackground />
+      <MainMenu.Separator />
+      <AppMenuLinks />
     </MainMenu>
   );
 });

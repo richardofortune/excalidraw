@@ -516,6 +516,7 @@ export const DEFAULT_ELEMENT_PROPS: {
 
 export const LIBRARY_SIDEBAR_TAB = "library";
 export const CANVAS_SEARCH_TAB = "search";
+export const RECENT_FILES_SIDEBAR_TAB = "recentFiles";
 
 export const DEFAULT_SIDEBAR = {
   name: "default",
@@ -556,6 +557,7 @@ export const EDITOR_LS_KEYS = {
   // legacy naming (non)scheme
   MERMAID_TO_EXCALIDRAW: "mermaid-to-excalidraw",
   PUBLISH_LIBRARY: "publish-library-data",
+  RECENT_FILES: "recent-files",
 } as const;
 
 /**

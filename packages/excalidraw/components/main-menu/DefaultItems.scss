@@ -18,4 +18,30 @@
       }
     }
   }
+
+  .RecentFiles__item {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .RecentFiles__name,
+  .RecentFiles__location {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .RecentFiles__location {
+    font-size: 0.75rem;
+    color: var(--color-on-surface-variant);
+  }
+
+  .dropdown-menu-item--recent-file {
+    height: auto;
+    min-height: 2.75rem;
+    align-items: flex-start;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
 }

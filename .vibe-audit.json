@@ -1,0 +1,122 @@
+{
+  "score": 52,
+  "level": "hazard",
+  "summary": "High drag. Oversized source files: packages/excalidraw/components/App.tsx is 12,862 lines. 25 file(s) over 1,200 lines.",
+  "signals": [
+    {
+      "id": "giant-source-files",
+      "family": "structure_sprawl",
+      "title": "Oversized source files",
+      "detail": "packages/excalidraw/components/App.tsx is 12,862 lines. 25 file(s) over 1,200 lines.",
+      "evidence": [
+        "packages/excalidraw/components/App.tsx (12,862 lines)",
+        "packages/excalidraw/tests/history.test.tsx (5,307 lines)",
+        "packages/excalidraw/subset/woff2/woff2-bindings.ts (4,051 lines)",
+        "packages/element/src/binding.ts (2,942 lines)",
+        "packages/element/src/linearElementEditor.ts (2,507 lines)"
+      ],
+      "points": 18,
+      "priority": 1,
+      "confidence": "high"
+    },
+    {
+      "id": "large-codebase-footprint",
+      "family": "llm_friction",
+      "title": "Large codebase token footprint",
+      "detail": "~2,287,059 estimated tokens across 714 source files. Multi-file tasks will pressure the context window.",
+      "evidence": [
+        "~2,287,059 tokens (181,542 code lines)"
+      ],
+      "points": 10,
+      "priority": 2,
+      "confidence": "medium"
+    },
+    {
+      "id": "high-file-count",
+      "family": "llm_friction",
+      "title": "High source file count",
+      "detail": "714 source files. An LLM resolving a cross-cutting change may need to load dozens of files to build sufficient context.",
+      "evidence": [],
+      "points": 10,
+      "priority": 2,
+      "confidence": "medium"
+    },
+    {
+      "id": "agent-scaffolding-sprawl",
+      "family": "process_theatre",
+      "title": "Agent scaffolding sprawl",
+      "detail": "2 AI context files coexist \u2014 consolidate to one.",
+      "evidence": [
+        "CLAUDE.md",
+        ".github/copilot-instructions.md"
+      ],
+      "points": 8,
+      "priority": 1,
+      "confidence": "high"
+    },
+    {
+      "id": "competing-lock-files",
+      "family": "operational_clutter",
+      "title": "Competing package lock files",
+      "detail": "Multiple lock files found: package-lock.json, yarn.lock",
+      "evidence": [
+        "package-lock.json",
+        "yarn.lock"
+      ],
+      "points": 6,
+      "priority": 2,
+      "confidence": "high"
+    }
+  ],
+  "actions": [
+    {
+      "id": "consolidate-ai-context",
+      "title": "Consolidate AI context files",
+      "detail": "Pick one AI context file (e.g. CLAUDE.md) and remove or merge the rest.",
+      "priority": 1
+    },
+    {
+      "id": "split-giant-files",
+      "title": "Split oversized source files",
+      "detail": "Break files over 1,200 lines into modules with clear, single responsibilities.",
+      "priority": 1
+    },
+    {
+      "id": "pick-one-package-manager",
+      "title": "Remove duplicate lock files",
+      "detail": "Pick one package manager and delete the others' lock files to avoid install divergence.",
+      "priority": 2
+    },
+    {
+      "id": "reduce-codebase-footprint",
+      "title": "Reduce codebase token footprint",
+      "detail": "Extract stable, rarely-changing modules into separate packages. Large generated or vendor files should not be in the main source tree.",
+      "priority": 2
+    },
+    {
+      "id": "reduce-file-count",
+      "title": "Reduce source file count",
+      "detail": "Consolidate thin files and remove dead modules. Fewer files means cheaper, more reliable LLM reasoning.",
+      "priority": 2
+    }
+  ],
+  "families": {
+    "process_theatre": 8,
+    "operational_clutter": 6,
+    "structure_sprawl": 18,
+    "test_gaps": 0,
+    "doc_sprawl": 0,
+    "generated_artifacts": 0,
+    "llm_friction": 20
+  },
+  "meta": {
+    "path": "/Users/mrfortune/Documents/github/excalidraw",
+    "scanned_at": "2026-05-13T10:59:38Z",
+    "git_commit": "2dfcc6f0",
+    "source_files": 714,
+    "test_files": 144,
+    "code_lines": 181542,
+    "doc_lines": 7237,
+    "estimated_tokens": 2287059
+  }
+}

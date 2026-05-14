@@ -26,6 +26,11 @@ export type SidebarProps<P = {}> = {
    */
   onDock?: (docked: boolean) => void;
   docked?: boolean;
+  /**
+   * When false, the sidebar stays open until explicitly closed via its toggle
+   * or close button.
+   */
+  closeOnOutsideInteraction?: boolean;
   className?: string;
   // NOTE sidebars we use internally inside the editor must have this flag set.
   // It indicates that this sidebar should have lower precedence over host

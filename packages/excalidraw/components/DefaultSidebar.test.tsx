@@ -5,6 +5,7 @@ import { DEFAULT_SIDEBAR } from "@excalidraw/common";
 import { DefaultSidebar } from "../index";
 import {
   fireEvent,
+  queryByTestId,
   waitFor,
   withExcalidrawDimensions,
 } from "../tests/test-utils";
@@ -141,6 +142,40 @@ describe("DefaultSidebar", () => {
 
         const { sidebar } = await assertSidebarDockButton(false);
         expect(sidebar).not.toHaveClass("sidebar--docked");
+      },
+    );
+  });
+
+  it("should stay open on outside click and Escape until explicitly closed", async () => {
+    await assertExcalidrawWithSidebar(
+      <DefaultSidebar docked={false} />,
+      DEFAULT_SIDEBAR.name,
+      async () => {
+        const sidebar = document.querySelector<HTMLElement>(".sidebar");
+        expect(sidebar).not.toBe(null);
+
+        fireEvent.pointerDown(document.body);
+        fireEvent.mouseDown(document.body);
+        fireEvent.click(document.body);
+
+        await waitFor(() => {
+          expect(document.querySelector(".sidebar")).not.toBe(null);
+        });
+
+        fireEvent.keyDown(document, { key: "Escape" });
+
+        await waitFor(() => {
+          expect(document.querySelector(".sidebar")).not.toBe(null);
+        });
+
+        const closeButton = queryByTestId(sidebar!, "sidebar-close");
+        expect(closeButton).not.toBe(null);
+
+        fireEvent.click(closeButton!);
+
+        await waitFor(() => {
+          expect(document.querySelector(".sidebar")).toBe(null);
+        });
       },
     );
   });

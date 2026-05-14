@@ -1,10 +1,15 @@
 import clsx from "clsx";
 
-import { THEME } from "@excalidraw/common";
+import {
+  DEFAULT_SIDEBAR,
+  RECENT_FILES_SIDEBAR_TAB,
+  THEME,
+} from "@excalidraw/common";
 
 import type { Theme } from "@excalidraw/element/types";
 
 import {
+  actionNewScene,
   actionClearCanvas,
   actionLoadScene,
   actionSaveToActiveFile,
@@ -24,15 +29,17 @@ import { resolveInputDevice } from "../../appState";
 import { getShortcutFromShortcutName } from "../../actions/shortcuts";
 import { trackEvent } from "../../analytics";
 import { useUIAppState } from "../../context/ui-appState";
-import { useSetAtom } from "../../editor-jotai";
+import { useAtomValue, useSetAtom } from "../../editor-jotai";
+import { recentFilesAtom } from "../../data/recentFiles";
 import { useI18n } from "../../i18n";
 import { activeConfirmDialogAtom } from "../ActiveConfirmDialog";
 import {
-  useExcalidrawSetAppState,
+  useExcalidrawAppState,
   useExcalidrawActionManager,
-  useExcalidrawElements,
-  useAppProps,
   useApp,
+  useExcalidrawElements,
+  useExcalidrawSetAppState,
+  useAppProps,
 } from "../App";
 import { openConfirmModal } from "../OverwriteConfirm/OverwriteConfirmState";
 import Trans from "../Trans";
@@ -45,8 +52,8 @@ import {
   GithubIcon,
   DiscordIcon,
   XBrandIcon,
-  settingsIcon,
   emptyIcon,
+  settingsIcon,
 } from "../icons";
 import {
   boltIcon,
@@ -54,7 +61,9 @@ import {
   ExportIcon,
   ExportImageIcon,
   HelpIcon,
+  historyIcon,
   LoadIcon,
+  PlusIcon,
   MoonIcon,
   save,
   searchIcon,
@@ -109,6 +118,60 @@ export const LoadScene = () => {
   );
 };
 LoadScene.displayName = "LoadScene";
+
+export const NewFile = () => {
+  const { t } = useI18n();
+  const actionManager = useExcalidrawActionManager();
+
+  if (!actionManager.isActionEnabled(actionNewScene)) {
+    return null;
+  }
+
+  return (
+    <DropdownMenuItem
+      icon={PlusIcon}
+      onSelect={() => actionManager.executeAction(actionNewScene)}
+      data-testid="new-file-button"
+      shortcut={getShortcutFromShortcutName("newScene")}
+      aria-label={t("buttons.newFile")}
+    >
+      {t("buttons.newFile")}
+    </DropdownMenuItem>
+  );
+};
+NewFile.displayName = "NewFile";
+
+export const RecentFiles = () => {
+  const { t } = useI18n();
+  const appState = useExcalidrawAppState();
+  const recentFiles = useAtomValue(recentFilesAtom);
+  const setAppState = useExcalidrawSetAppState();
+
+  const isOpen =
+    appState.openSidebar?.name === DEFAULT_SIDEBAR.name &&
+    appState.openSidebar?.tab === RECENT_FILES_SIDEBAR_TAB;
+
+  return (
+    <DropdownMenuItem
+      icon={historyIcon}
+      selected={isOpen}
+      onSelect={() => {
+        setAppState({
+          openSidebar: isOpen
+            ? null
+            : { name: DEFAULT_SIDEBAR.name, tab: RECENT_FILES_SIDEBAR_TAB },
+          openMenu: null,
+          openPopup: null,
+        });
+      }}
+      aria-label={t("buttons.recentFiles")}
+      badge={recentFiles.length ? recentFiles.length : undefined}
+    >
+      {t("buttons.recentFiles")}
+    </DropdownMenuItem>
+  );
+};
+RecentFiles.displayName = "RecentFiles";
 
 export const SaveToActiveFile = () => {
   const { t } = useI18n();

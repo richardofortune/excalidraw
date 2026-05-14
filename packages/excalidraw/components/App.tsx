@@ -3180,7 +3180,11 @@ class App extends React.Component<AppProps, AppState> {
       let zenModeEnabled = actionResult?.appState?.zenModeEnabled || false;
       const theme =
         actionResult?.appState?.theme || this.props.theme || THEME.LIGHT;
-      const name = actionResult?.appState?.name ?? this.state.name;
+      const name =
+        actionResult.appState &&
+        Object.prototype.hasOwnProperty.call(actionResult.appState, "name")
+          ? actionResult.appState.name ?? null
+          : this.state.name;
       const errorMessage =
         actionResult?.appState?.errorMessage ?? this.state.errorMessage;
       if (typeof this.props.viewModeEnabled !== "undefined") {
@@ -6301,8 +6305,14 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   public getName = () => {
+    const fileHandleName = this.state.fileHandle?.name?.replace(
+      /\.(?:excalidraw|json|png|svg)$/iu,
+      "",
+    );
+
     return (
       this.state.name ||
+      fileHandleName ||
       this.props.name ||
       `${t("labels.untitled")}-${getDateTime()}`
     );

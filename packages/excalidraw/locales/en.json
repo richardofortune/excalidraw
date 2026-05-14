@@ -235,6 +235,10 @@
     "copyLink": "Copy link",
     "save": "Save to current file",
     "saveAs": "Save as",
+    "newFile": "New file",
+    "recentFiles": "Recent files",
+    "clearRecentFiles": "Clear recent files",
+    "noRecentFiles": "No recent files",
     "load": "Open",
     "getShareableLink": "Get shareable link",
     "close": "Close",
@@ -243,6 +247,7 @@
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "resetZoom": "Reset zoom",
+    "fit": "Fit",
     "menu": "Menu",
     "done": "Done",
     "edit": "Edit",
@@ -297,6 +302,7 @@
     "fileTooBig": "File is too big. Maximum allowed size is {{maxSize}}.",
     "svgImageInsertError": "Couldn't insert SVG image. The SVG markup looks invalid.",
     "failedToFetchImage": "Failed to fetch image.",
+    "recentFileUnavailable": "Recent file is no longer available.",
     "cannotResolveCollabServer": "Couldn't connect to the collab server. Please reload the page and try again.",
     "importLibraryError": "Couldn't load library",
     "saveLibraryError": "Couldn't save library to storage. Please save your library to a file locally to make sure you don't lose changes.",
@@ -648,7 +654,17 @@
       "loadFromFile": {
         "title": "Load from file",
         "button": "Load from file",
-        "description": "Loading from a file will <bold>replace your existing content</bold>.<br></br>You can back up your drawing first using one of the options below."
+        "description": "Loading from a file will <bold>replace your existing content</bold>.<br></br>Your current drawing will be added to <bold>Recent files</bold> automatically. You can also back it up manually using one of the options below."
+      },
+      "newFile": {
+        "title": "Create new file",
+        "button": "Create new file",
+        "description": "Your current drawing will be moved to Recent files so you can reopen it later."
+      },
+      "loadFromRecent": {
+        "title": "Open recent file",
+        "button": "Open recent file",
+        "description": "Your current drawing will be moved to Recent files before opening the selected file."
       },
       "shareableLink": {
         "title": "Load from link",

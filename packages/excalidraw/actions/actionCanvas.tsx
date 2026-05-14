@@ -17,11 +17,14 @@ import { CaptureUpdateAction } from "@excalidraw/element";
 import type { Bounds } from "@excalidraw/common";
 
 import { getDefaultAppState } from "../appState";
+import { backupCurrentSceneToRecentFiles } from "../data/recentFiles";
 import { ColorPicker } from "../components/ColorPicker/ColorPicker";
 import { IconButton } from "../components/IconButton";
 import { Tooltip } from "../components/Tooltip";
+import { openConfirmModal } from "../components/OverwriteConfirm/OverwriteConfirmState";
 import {
   MoonIcon,
+  PlusIcon,
   SunIcon,
   TrashIcon,
   zoomAreaIcon,
@@ -102,6 +105,8 @@ export const actionClearCanvas = register({
       appState: {
         ...getDefaultAppState(),
         files: {},
+        name: null,
+        fileHandle: null,
         theme: appState.theme,
         penMode: appState.penMode,
         penDetected: appState.penDetected,
@@ -123,6 +128,69 @@ export const actionClearCanvas = register({
       captureUpdate: CaptureUpdateAction.IMMEDIATELY,
     };
   },
+});
+
+export const actionNewScene = register({
+  name: "newScene",
+  label: "buttons.newFile",
+  icon: PlusIcon,
+  trackEvent: { category: "canvas", action: "newScene" },
+  predicate: (elements, appState, props, app) => {
+    return (
+      !!app.props.UIOptions.canvasActions.clearCanvas &&
+      !appState.viewModeEnabled &&
+      appState.openDialog?.name !== "elementLinkSelector"
+    );
+  },
+  perform: async (elements, appState, _, app) => {
+    if (
+      getNonDeletedElements(elements).length > 0 &&
+      !(await openConfirmModal({
+        title: t("overwriteConfirm.modal.newFile.title"),
+        actionLabel: t("overwriteConfirm.modal.newFile.button"),
+        color: "warning",
+        description: t("overwriteConfirm.modal.newFile.description"),
+      }))
+    ) {
+      return false;
+    }
+
+    await backupCurrentSceneToRecentFiles({
+      elements,
+      appState,
+      files: app.files,
+    });
+
+    app.imageCache.clear();
+
+    return {
+      elements: elements.map((element) =>
+        newElementWith(element, { isDeleted: true }),
+      ),
+      appState: {
+        ...getDefaultAppState(),
+        files: {},
+        theme: appState.theme,
+        penMode: appState.penMode,
+        penDetected: appState.penDetected,
+        exportBackground: appState.exportBackground,
+        exportEmbedScene: appState.exportEmbedScene,
+        gridSize: appState.gridSize,
+        gridStep: appState.gridStep,
+        gridModeEnabled: appState.gridModeEnabled,
+        stats: appState.stats,
+        activeTool:
+          appState.activeTool.type === "image"
+            ? {
+                ...appState.activeTool,
+                type: app.state.preferredSelectionTool.type,
+              }
+            : appState.activeTool,
+      },
+      captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+    };
+  },
+  keyTest: (event) => event[KEYS.CTRL_OR_CMD] && event.key.toLowerCase() === "n",
 });
 
 export const actionZoomIn = register({
@@ -403,6 +471,21 @@ export const actionZoomToFit = register({
       },
     };
   },
+  PanelComponent: ({ updateData }) => (
+    <Tooltip label={t("helpDialog.zoomToFit")} style={{ height: "100%" }}>
+      <IconButton
+        type="button"
+        className="fit-zoom-button zoom-button"
+        title={t("helpDialog.zoomToFit")}
+        aria-label={t("helpDialog.zoomToFit")}
+        onClick={() => {
+          updateData(null);
+        }}
+      >
+        {t("buttons.fit")}
+      </IconButton>
+    </Tooltip>
+  ),
   keyTest: (event) =>
     event.code === CODES.ONE &&
     event.shiftKey &&

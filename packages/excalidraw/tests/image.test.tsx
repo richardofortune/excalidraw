@@ -56,6 +56,7 @@ describe("image insertion", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.unstubAllGlobals();
+    localStorage.clear();
 
     reseed(7);
 

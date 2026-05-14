@@ -1,11 +1,11 @@
-import { actionLoadScene, actionShortcuts } from "../../actions";
+import { actionLoadScene, actionNewScene, actionShortcuts } from "../../actions";
 import { getShortcutFromShortcutName } from "../../actions/shortcuts";
 import { useTunnels } from "../../context/tunnels";
 import { useUIAppState } from "../../context/ui-appState";
 import { t, useI18n } from "../../i18n";
 import { useEditorInterface, useExcalidrawActionManager } from "../App";
 import { ExcalidrawLogo } from "../ExcalidrawLogo";
-import { HelpIcon, LoadIcon, usersIcon } from "../icons";
+import { HelpIcon, LoadIcon, PlusIcon, usersIcon } from "../icons";
 
 import type { JSX } from "react";
 
@@ -98,6 +98,7 @@ const Center = ({ children }: { children?: React.ReactNode }) => {
             <Logo />
             <Heading>{t("welcomeScreen.defaults.center_heading")}</Heading>
             <Menu>
+              <MenuItemNewFile />
               <MenuItemLoadScene />
               <MenuItemHelp />
             </Menu>
@@ -167,6 +168,26 @@ const MenuItemLoadScene = () => {
 };
 MenuItemLoadScene.displayName = "MenuItemLoadScene";
 
+const MenuItemNewFile = () => {
+  const appState = useUIAppState();
+  const actionManager = useExcalidrawActionManager();
+
+  if (appState.viewModeEnabled) {
+    return null;
+  }
+
+  return (
+    <WelcomeScreenMenuItem
+      onSelect={() => actionManager.executeAction(actionNewScene)}
+      shortcut={getShortcutFromShortcutName("newScene")}
+      icon={PlusIcon}
+    >
+      {t("buttons.newFile")}
+    </WelcomeScreenMenuItem>
+  );
+};
+MenuItemNewFile.displayName = "MenuItemNewFile";
+
 const MenuItemLiveCollaborationTrigger = ({
   onSelect,
 }: {
@@ -190,6 +211,7 @@ Center.Menu = Menu;
 Center.MenuItem = WelcomeScreenMenuItem;
 Center.MenuItemLink = WelcomeScreenMenuItemLink;
 Center.MenuItemHelp = MenuItemHelp;
+Center.MenuItemNewFile = MenuItemNewFile;
 Center.MenuItemLoadScene = MenuItemLoadScene;
 Center.MenuItemLiveCollaborationTrigger = MenuItemLiveCollaborationTrigger;
 

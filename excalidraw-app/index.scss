@@ -43,6 +43,42 @@
         }
       }
     }
+
+    .app-main-menu-links {
+      margin-top: 0.25rem;
+      padding: 0.25rem 0;
+      justify-content: center;
+    }
+
+    .app-main-menu-links__item {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 0.75rem;
+      color: var(--color-on-surface);
+      text-decoration: none;
+      background: transparent;
+      transition:
+        background-color 120ms ease,
+        color 120ms ease,
+        transform 120ms ease;
+
+      &:hover {
+        background: var(--button-hover-bg);
+        transform: translateY(-1px);
+      }
+
+      svg {
+        width: 1.1rem;
+        height: 1.1rem;
+      }
+    }
+
+    .app-main-menu-links__item--accent {
+      color: var(--color-promo);
+    }
   }
 
   &.theme--dark {

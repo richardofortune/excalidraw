@@ -144,6 +144,8 @@ export const loadSceneOrLibraryFromBlob = async (
   fileHandle?: FileSystemFileHandle | null,
 ) => {
   const contents = await parseFileContents(blob);
+  const resolvedFileHandle = fileHandle || blob.handle || null;
+  const blobName = "name" in blob && typeof blob.name === "string" ? blob.name : null;
   let data;
   try {
     try {
@@ -162,6 +164,15 @@ export const loadSceneOrLibraryFromBlob = async (
         repairBindings: true,
         deleteInvisibleElements: true,
       });
+      const importedAppState = cleanAppStateForExport(data.appState || {});
+      const derivedName =
+        data.appState?.name ||
+        (resolvedFileHandle?.name
+          ? stripSceneFileExtension(resolvedFileHandle.name)
+          : blobName
+          ? stripSceneFileExtension(blobName)
+          : null);
+
       return {
         type: MIME_TYPES.excalidraw,
         data: {
@@ -169,8 +180,9 @@ export const loadSceneOrLibraryFromBlob = async (
           appState: restoreAppState(
             {
               theme: localAppState?.theme,
-              fileHandle: fileHandle || blob.handle || null,
-              ...cleanAppStateForExport(data.appState || {}),
+              fileHandle: resolvedFileHandle,
+              name: derivedName,
+              ...importedAppState,
               ...(localAppState
                 ? getScrollToContentState(elements, localAppState)
                 : {}),
@@ -514,6 +526,20 @@ export const createFile = (
 
 const normalizedFileSymbol = Symbol("fileNormalized");
 
+const stripSceneFileExtension = (filename: string) =>
+  filename.replace(/\.(?:excalidraw|json|png|svg)$/iu, "");
+
+const preserveFileHandle = (nextFile: File, sourceFile: File) => {
+  if ("handle" in sourceFile && (sourceFile as any).handle) {
+    Object.defineProperty(nextFile, "handle", {
+      configurable: true,
+      value: (sourceFile as any).handle,
+    });
+  }
+
+  return nextFile;
+};
+
 /** attempts to detect correct mimeType if none is set, or if an image
  * has an incorrect extension.
  * Note: doesn't handle missing .excalidraw/.excalidrawlib extension  */
@@ -524,16 +550,22 @@ export const normalizeFile = async (file: File) => {
   }
 
   if (file?.name?.endsWith(".excalidrawlib")) {
-    file = createFile(file, MIME_TYPES.excalidrawlib, file.name);
+    file = preserveFileHandle(
+      createFile(file, MIME_TYPES.excalidrawlib, file.name),
+      file,
+    );
   } else if (file?.name?.endsWith(".excalidraw")) {
-    file = createFile(file, MIME_TYPES.excalidraw, file.name);
+    file = preserveFileHandle(
+      createFile(file, MIME_TYPES.excalidraw, file.name),
+      file,
+    );
   } else if (!file.type || file.type?.startsWith("image/")) {
     // when the file is an image, make sure the extension corresponds to the
     // actual mimeType (this is an edge case, but happens - especially
     // with AI generated images)
     const mimeType = await getActualMimeTypeFromImage(file);
     if (mimeType && mimeType !== file.type) {
-      file = createFile(file, mimeType, file.name);
+      file = preserveFileHandle(createFile(file, mimeType, file.name), file);
     }
   }
 

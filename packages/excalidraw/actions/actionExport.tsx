@@ -15,6 +15,7 @@ import { ExportIcon, questionCircle, saveAs } from "../components/icons";
 import { loadFromJSON, saveAsJSON } from "../data";
 import { isImageFileHandle } from "../data/blob";
 import { nativeFileSystemSupported } from "../data/filesystem";
+import { backupCurrentSceneToRecentFiles } from "../data/recentFiles";
 
 import { resaveAsImageWithScene } from "../data/resave";
 
@@ -287,6 +288,16 @@ export const actionSaveToActiveFile = register({
             fileHandle: previousFileHandle,
           });
 
+      await backupCurrentSceneToRecentFiles({
+        elements,
+        appState: {
+          ...appState,
+          fileHandle,
+          name: filename,
+        },
+        files: app.files,
+      });
+
       return {
         captureUpdate: CaptureUpdateAction.NEVER,
         appState: {
@@ -345,6 +356,16 @@ export const actionSaveFileToDisk = register({
         data: exportedDataPromise,
         filename: app.getName(),
         fileHandle: null,
+      });
+
+      await backupCurrentSceneToRecentFiles({
+        elements,
+        appState: {
+          ...appState,
+          fileHandle: savedFileHandle,
+          name: app.getName(),
+        },
+        files: app.files,
       });
 
       return {
@@ -406,6 +427,22 @@ export const actionLoadScene = register({
         appState: loadedAppState,
         files,
       } = await loadFromJSON(appState, elements);
+
+      await backupCurrentSceneToRecentFiles({
+        elements,
+        appState,
+        files: app.files,
+      });
+
+      await backupCurrentSceneToRecentFiles({
+        elements: loadedElements,
+        appState: {
+          ...appState,
+          ...loadedAppState,
+        },
+        files,
+      });
+
       return {
         elements: loadedElements,
         appState: loadedAppState,

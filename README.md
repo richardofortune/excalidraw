@@ -5,6 +5,36 @@
   </picture>
 </a>
 
+## 🚀 Quick Launch (Local Development)
+
+To run Excalidraw locally:
+
+1. **Clone the repository:**
+  ```sh
+  git clone https://github.com/excalidraw/excalidraw.git
+  cd excalidraw
+  ```
+2. **Install dependencies:**
+  ```sh
+  yarn install
+  ```
+3. **Start the app:**
+  ```sh
+  yarn start
+  ```
+  This launches the local development server (usually at http://localhost:3000).
+
+**To run the full-featured app (excalidraw.com clone):**
+
+```sh
+cd excalidraw-app
+yarn install
+yarn start
+```
+Then open http://localhost:3000 in your browser.
+
+For more details, see the [Development Guide](https://docs.excalidraw.com/docs/introduction/development).
+
 <h4 align="center">
   <a href="https://excalidraw.com">Excalidraw Editor</a> |
   <a href="https://plus.excalidraw.com/blog">Blog</a> |

@@ -26,6 +26,7 @@ export {
 export {
   actionChangeViewBackgroundColor,
   actionClearCanvas,
+  actionNewScene,
   actionZoomIn,
   actionZoomOut,
   actionResetZoom,

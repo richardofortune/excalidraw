@@ -4,6 +4,7 @@ import {
   CANVAS_SEARCH_TAB,
   DEFAULT_SIDEBAR,
   LIBRARY_SIDEBAR_TAB,
+  RECENT_FILES_SIDEBAR_TAB,
   composeEventHandlers,
 } from "@excalidraw/common";
 
@@ -16,10 +17,11 @@ import "../components/dropdownMenu/DropdownMenu.scss";
 
 import { useExcalidrawSetAppState } from "./App";
 import { LibraryMenu } from "./LibraryMenu";
+import { RecentFilesPanel } from "./RecentFilesPanel";
 import { SearchMenu } from "./SearchMenu";
 import { Sidebar } from "./Sidebar/Sidebar";
 import { withInternalFallback } from "./hoc/withInternalFallback";
-import { LibraryIcon, searchIcon } from "./icons";
+import { LibraryIcon, historyIcon, searchIcon } from "./icons";
 
 import type { SidebarProps, SidebarTriggerProps } from "./Sidebar/common";
 
@@ -82,6 +84,7 @@ export const DefaultSidebar = Object.assign(
           name="default"
           key="default"
           className={clsx("default-sidebar", className)}
+          closeOnOutsideInteraction={false}
           docked={
             isForceDocked || (docked ?? appState.defaultSidebarDockedPreference)
           }
@@ -105,6 +108,9 @@ export const DefaultSidebar = Object.assign(
                 <Sidebar.TabTrigger tab={LIBRARY_SIDEBAR_TAB}>
                   {LibraryIcon}
                 </Sidebar.TabTrigger>
+                <Sidebar.TabTrigger tab={RECENT_FILES_SIDEBAR_TAB}>
+                  {historyIcon}
+                </Sidebar.TabTrigger>
                 <DefaultSidebarTabTriggersTunnel.Out />
               </Sidebar.TabTriggers>
             </Sidebar.Header>
@@ -113,6 +119,9 @@ export const DefaultSidebar = Object.assign(
             </Sidebar.Tab>
             <Sidebar.Tab tab={CANVAS_SEARCH_TAB}>
               <SearchMenu />
+            </Sidebar.Tab>
+            <Sidebar.Tab tab={RECENT_FILES_SIDEBAR_TAB}>
+              <RecentFilesPanel />
             </Sidebar.Tab>
             {children}
           </Sidebar.Tabs>
