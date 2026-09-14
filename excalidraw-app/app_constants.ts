@@ -59,3 +59,50 @@ export const COOKIES = {
 export const isExcalidrawPlusSignedUser = document.cookie.includes(
   COOKIES.AUTH_STATE_COOKIE,
 );
+
+// version of this fork, bumped manually when we ship changes on top of upstream
+export const FORK_VERSION = "1.0.0";
+
+const gitInfo =
+  typeof __FORK_GIT_INFO__ === "undefined" ? null : __FORK_GIT_INFO__;
+
+/** short label for the menu, e.g. `v1.0.0 · master +1 −11*` */
+export const FORK_VERSION_LABEL = (() => {
+  if (!gitInfo) {
+    return `v${FORK_VERSION}`;
+  }
+
+  const drift = [
+    gitInfo.ahead ? `+${gitInfo.ahead}` : "",
+    gitInfo.behind ? `−${gitInfo.behind}` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return `v${FORK_VERSION} · ${gitInfo.branch}${drift ? ` ${drift}` : ""}${
+    gitInfo.dirty ? "*" : ""
+  }`;
+})();
+
+/** the same thing spelled out, shown on hover */
+export const FORK_VERSION_TITLE = (() => {
+  if (!gitInfo) {
+    return `v${FORK_VERSION} (built without git info)`;
+  }
+
+  const lines = [`${gitInfo.branch} @ ${gitInfo.sha}`];
+
+  if (gitInfo.base) {
+    lines.push(
+      gitInfo.ahead || gitInfo.behind
+        ? `${gitInfo.ahead} ahead, ${gitInfo.behind} behind ${gitInfo.base}`
+        : `in sync with ${gitInfo.base}`,
+    );
+  }
+
+  if (gitInfo.dirty) {
+    lines.push("built with uncommitted changes");
+  }
+
+  return lines.join("\n");
+})();

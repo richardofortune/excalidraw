@@ -92,7 +92,9 @@ export const RecentFilesPanel = () => {
   return (
     <div className="RecentFilesPanel">
       <div className="RecentFilesPanel__header">
-        <div className="RecentFilesPanel__title">{t("buttons.recentFiles")}</div>
+        <div className="RecentFilesPanel__title">
+          {t("buttons.recentFiles")}
+        </div>
         <Button
           className="RecentFilesPanel__clear"
           onSelect={() => {
@@ -154,7 +156,9 @@ export const RecentFilesPanel = () => {
           ))}
         </div>
       ) : (
-        <div className="RecentFilesPanel__empty">{t("buttons.noRecentFiles")}</div>
+        <div className="RecentFilesPanel__empty">
+          {t("buttons.noRecentFiles")}
+        </div>
       )}
     </div>
   );

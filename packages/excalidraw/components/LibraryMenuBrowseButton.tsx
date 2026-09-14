@@ -15,14 +15,15 @@ const LibraryMenuBrowseButton = ({
 }) => {
   const referrer =
     libraryReturnUrl || window.location.origin + window.location.pathname;
+  const browseHref = `${import.meta.env.VITE_APP_LIBRARY_URL}?target=${
+    window.name || "_blank"
+  }&referrer=${referrer}&useHash=true&token=${id}&theme=${theme}&version=${
+    VERSIONS.excalidrawLibrary
+  }`;
   return (
     <a
       className="library-menu-browse-button"
-      href={`${import.meta.env.VITE_APP_LIBRARY_URL}?target=${
-        window.name || "_blank"
-      }&referrer=${referrer}&useHash=true&token=${id}&theme=${theme}&version=${
-        VERSIONS.excalidrawLibrary
-      }`}
+      href={browseHref}
       target="_excalidraw_libraries"
     >
       {t("labels.libraries")}

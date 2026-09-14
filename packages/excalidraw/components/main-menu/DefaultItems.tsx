@@ -645,6 +645,48 @@ export const PreferencesToggleGridModeItem = () => {
   );
 };
 
+export const PreferencesGridStyleItem = () => {
+  const { t } = useI18n();
+  const appState = useUIAppState();
+  const setAppState = useExcalidrawSetAppState();
+
+  if (!appState.gridModeEnabled) {
+    return null;
+  }
+
+  return (
+    <DropdownMenuItemContentRadio<"lines" | "dots" | "crosses">
+      name="gridStyle"
+      icon={emptyIcon}
+      value={appState.gridStyle}
+      onChange={(value) => {
+        setAppState({
+          gridStyle: value,
+        });
+      }}
+      choices={[
+        {
+          value: "lines",
+          label: t("labels.gridStyle_lines"),
+          ariaLabel: t("labels.gridStyle_lines"),
+        },
+        {
+          value: "dots",
+          label: t("labels.gridStyle_dots"),
+          ariaLabel: t("labels.gridStyle_dots"),
+        },
+        {
+          value: "crosses",
+          label: t("labels.gridStyle_crosses"),
+          ariaLabel: t("labels.gridStyle_crosses"),
+        },
+      ]}
+    >
+      {t("labels.gridStyle")}
+    </DropdownMenuItemContentRadio>
+  );
+};
+
 export const PreferencesToggleZenModeItem = () => {
   const { t } = useI18n();
   const actionManager = useExcalidrawActionManager();
@@ -723,6 +765,7 @@ export const Preferences = ({
             <PreferencesToggleToolLockItem />
             <PreferencesToggleSnapModeItem />
             <PreferencesToggleGridModeItem />
+            <PreferencesGridStyleItem />
             <PreferencesToggleZenModeItem />
             <PreferencesToggleViewModeItem />
             <PreferencesToggleElementPropertiesItem />

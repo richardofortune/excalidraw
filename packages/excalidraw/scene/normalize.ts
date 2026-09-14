@@ -15,3 +15,7 @@ export const getNormalizedGridSize = (gridStep: number) => {
 export const getNormalizedGridStep = (gridStep: number) => {
   return clamp(Math.round(gridStep), 1, 100);
 };
+
+export const getNormalizedGridStyle = (gridStyle: unknown) => {
+  return gridStyle === "dots" || gridStyle === "crosses" ? gridStyle : "lines";
+};

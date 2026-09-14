@@ -1196,6 +1196,34 @@ describe("restoreAppState", () => {
     });
   });
 
+  describe("with grid style in imported data state", () => {
+    it("restores supported grid styles", () => {
+      const stubImportedAppState = getDefaultAppState();
+      stubImportedAppState.gridStyle = "dots";
+
+      const restoredAppState = restore.restoreAppState(
+        stubImportedAppState,
+        getDefaultAppState(),
+      );
+
+      expect(restoredAppState.gridStyle).toBe("dots");
+    });
+
+    it("normalizes unsupported grid styles to lines", () => {
+      const stubImportedAppState = {
+        ...getDefaultAppState(),
+        gridStyle: "triangles",
+      } as any;
+
+      const restoredAppState = restore.restoreAppState(
+        stubImportedAppState,
+        getDefaultAppState(),
+      );
+
+      expect(restoredAppState.gridStyle).toBe("lines");
+    });
+  });
+
   it("should handle appState.openSidebar legacy values", () => {
     expect(restore.restoreAppState({}, null).openSidebar).toBe(null);
     expect(

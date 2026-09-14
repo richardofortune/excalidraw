@@ -1,4 +1,6 @@
+import { execFileSync } from "child_process";
 import path from "path";
+
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import svgrPlugin from "vite-plugin-svgr";
@@ -7,12 +9,80 @@ import { VitePWA } from "vite-plugin-pwa";
 import checker from "vite-plugin-checker";
 import { createHtmlPlugin } from "vite-plugin-html";
 import Sitemap from "vite-plugin-sitemap";
+
 import { woff2BrowserPlugin } from "../scripts/woff2/woff2-vite-plugins";
+
+const git = (...args: string[]) =>
+  execFileSync("git", args, {
+    cwd: __dirname,
+    encoding: "utf8",
+    // we handle failures ourselves, don't leak git's stderr into the build log
+    stdio: ["ignore", "pipe", "ignore"],
+  }).trim();
+
+/**
+ * Snapshot of where this build sits relative to the upstream Excalidraw repo.
+ * Resolved once when vite loads its config, so the dev server needs a restart
+ * to pick up a branch switch or new commits.
+ */
+const readGitInfo = () => {
+  try {
+    const sha = git("rev-parse", "--short", "HEAD");
+    const head = git("rev-parse", "--abbrev-ref", "HEAD");
+    // detached HEAD has no branch name to show
+    const branch = head === "HEAD" ? sha : head;
+
+    // prefer comparing against upstream excalidraw, fall back to our own remote
+    const base = [
+      "upstream/master",
+      "upstream/main",
+      "origin/master",
+      "origin/main",
+    ].find((ref) => {
+      try {
+        git("rev-parse", "--verify", "--quiet", ref);
+        return true;
+      } catch {
+        return false;
+      }
+    });
+
+    let ahead = 0;
+    let behind = 0;
+    if (base) {
+      // left = commits only on base (behind), right = commits only on HEAD (ahead)
+      [behind, ahead] = git(
+        "rev-list",
+        "--left-right",
+        "--count",
+        `${base}...HEAD`,
+      )
+        .split(/\s+/)
+        .map(Number);
+    }
+
+    return {
+      sha,
+      branch,
+      base: base ?? null,
+      ahead,
+      behind,
+      dirty: git("status", "--porcelain").length > 0,
+    };
+  } catch {
+    // no git available (e.g. building from a tarball or a CI image without it)
+    return null;
+  }
+};
+
 export default defineConfig(({ mode }) => {
   // To load .env variables
   const envVars = loadEnv(mode, `../`);
   // https://vitejs.dev/config/
   return {
+    define: {
+      __FORK_GIT_INFO__: JSON.stringify(readGitInfo()),
+    },
     server: {
       port: Number(envVars.VITE_APP_PORT || 3000),
       // open the browser

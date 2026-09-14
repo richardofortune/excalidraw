@@ -108,6 +108,7 @@ import { getDefaultAppState } from "../appState";
 
 import {
   getNormalizedGridSize,
+  getNormalizedGridStyle,
   getNormalizedGridStep,
   getNormalizedZoom,
 } from "../scene";
@@ -1346,6 +1347,7 @@ export const restoreAppState = (
     currentItemStickynoteBackgroundColor: normalizeStickyNoteBackgroundColor(
       nextAppState.currentItemStickynoteBackgroundColor,
     ),
+    gridStyle: getNormalizedGridStyle(appState.gridStyle),
     editingFrame: null,
   };
 };

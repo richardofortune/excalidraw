@@ -15,7 +15,11 @@ import { isDevEnv } from "@excalidraw/common";
 import type { Theme } from "@excalidraw/element/types";
 
 import { LanguageList } from "../app-language/LanguageList";
-import { isExcalidrawPlusSignedUser } from "../app_constants";
+import {
+  FORK_VERSION_LABEL,
+  FORK_VERSION_TITLE,
+  isExcalidrawPlusSignedUser,
+} from "../app_constants";
 
 import { saveDebugState } from "./DebugCanvas";
 
@@ -78,8 +82,12 @@ const AppMenuLinks = () => {
         target="_blank"
         rel="noopener"
         className="app-main-menu-links__item app-main-menu-links__item--accent"
-        aria-label={isExcalidrawPlusSignedUser ? t("labels.signIn") : t("labels.signUp")}
-        title={isExcalidrawPlusSignedUser ? t("labels.signIn") : t("labels.signUp")}
+        aria-label={
+          isExcalidrawPlusSignedUser ? t("labels.signIn") : t("labels.signUp")
+        }
+        title={
+          isExcalidrawPlusSignedUser ? t("labels.signIn") : t("labels.signUp")
+        }
       >
         {loginIcon}
       </a>
@@ -94,7 +102,6 @@ export const AppMainMenu: React.FC<{
   theme: Theme | "system";
   refresh: () => void;
 }> = React.memo((props) => {
-  const { t } = useI18n();
   return (
     <MainMenu>
       <MainMenu.DefaultItems.NewFile />
@@ -140,6 +147,12 @@ export const AppMainMenu: React.FC<{
       <MainMenu.DefaultItems.ChangeCanvasBackground />
       <MainMenu.Separator />
       <AppMenuLinks />
+      <MainMenu.ItemCustom
+        className="app-main-menu-version"
+        data-testid="app-main-menu-version"
+      >
+        <span title={FORK_VERSION_TITLE}>{FORK_VERSION_LABEL}</span>
+      </MainMenu.ItemCustom>
     </MainMenu>
   );
 });

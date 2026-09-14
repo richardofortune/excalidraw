@@ -172,7 +172,12 @@ describe("recent files", () => {
 
     API.setAppState({ name: "Untitled-2026-05-09" });
 
-    const loadedScene = await loadFromBlob(file, h.state, h.elements, file.handle);
+    const loadedScene = await loadFromBlob(
+      file,
+      h.state,
+      h.elements,
+      file.handle,
+    );
 
     expect(loadedScene.appState.name).toBe("Roadmap");
   });
@@ -200,9 +205,9 @@ describe("recent files", () => {
 
     await waitFor(() => {
       expect(editorJotaiStore.get(recentFilesAtom)).toHaveLength(1);
-      expect(
-        h.elements.filter((element) => !element.isDeleted),
-      ).toHaveLength(0);
+      expect(h.elements.filter((element) => !element.isDeleted)).toHaveLength(
+        0,
+      );
       expect(h.state.name).toBeNull();
     });
   });
@@ -243,11 +248,12 @@ describe("recent files", () => {
 
       await waitFor(() => {
         expect(document.querySelector(".RecentFilesPanel")).not.toBeNull();
-        expect(document.querySelector(".RecentFilesPanel__itemName")?.textContent).toBe(
-          "Roadmap",
-        );
         expect(
-          document.querySelector(".RecentFilesPanel__itemTimestamp")?.textContent,
+          document.querySelector(".RecentFilesPanel__itemName")?.textContent,
+        ).toBe("Roadmap");
+        expect(
+          document.querySelector(".RecentFilesPanel__itemTimestamp")
+            ?.textContent,
         ).toBe("now");
       });
     });

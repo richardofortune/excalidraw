@@ -210,6 +210,7 @@ export type StaticCanvasAppState = Readonly<
     selectedElementsAreBeingDragged: AppState["selectedElementsAreBeingDragged"];
     gridSize: AppState["gridSize"];
     gridStep: AppState["gridStep"];
+    gridStyle: AppState["gridStyle"];
     frameRendering: AppState["frameRendering"];
     currentHoveredFontFamily: AppState["currentHoveredFontFamily"];
     hoveredElementIds: AppState["hoveredElementIds"];
@@ -502,6 +503,7 @@ export interface AppState {
   /** grid cell px size */
   gridSize: number;
   gridStep: number;
+  gridStyle: "lines" | "dots" | "crosses";
   gridModeEnabled: boolean;
   viewModeEnabled: boolean;
 

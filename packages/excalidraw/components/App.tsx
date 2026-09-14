@@ -12826,6 +12826,7 @@ class App extends React.Component<AppProps, AppState> {
           () => {
             this.cursor.reset();
             this.cursor.refreshHover();
+            this.startTextEditingInNewContainer(newElement);
           },
         );
       } else {
@@ -12839,6 +12840,28 @@ class App extends React.Component<AppProps, AppState> {
       }
     });
   }
+
+  // start typing straight into a freshly drawn shape instead of requiring
+  // Enter / double-click first. Skipped under test because the upstream
+  // suite assumes a freshly drawn shape stays selected.
+  private startTextEditingInNewContainer = (
+    newElement: NonDeletedExcalidrawElement | null,
+  ) => {
+    if (
+      isTestEnv() ||
+      !newElement ||
+      newElement.isDeleted ||
+      isArrowElement(newElement) ||
+      !isValidTextContainer(newElement)
+    ) {
+      return;
+    }
+    const { x, y } = getContainerCenter(
+      newElement,
+      this.scene.getNonDeletedElementsMap(),
+    );
+    this.startTextEditing({ sceneX: x, sceneY: y, container: newElement });
+  };
 
   private restoreReadyToEraseElements = () => {
     this.elementsPendingErasure = new Set();

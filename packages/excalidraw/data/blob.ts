@@ -145,7 +145,8 @@ export const loadSceneOrLibraryFromBlob = async (
 ) => {
   const contents = await parseFileContents(blob);
   const resolvedFileHandle = fileHandle || blob.handle || null;
-  const blobName = "name" in blob && typeof blob.name === "string" ? blob.name : null;
+  const blobName =
+    "name" in blob && typeof blob.name === "string" ? blob.name : null;
   let data;
   try {
     try {

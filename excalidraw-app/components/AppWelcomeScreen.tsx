@@ -11,6 +11,10 @@ export const AppWelcomeScreen: React.FC<{
   isCollabEnabled: boolean;
 }> = React.memo((props) => {
   const { t } = useI18n();
+  const plusAppHref = import.meta.env.VITE_APP_PLUS_APP;
+  const plusLandingPage = import.meta.env.VITE_APP_PLUS_LP;
+  const signedInHeadingHref = `${plusAppHref}?utm_source=excalidraw&utm_medium=app&utm_content=welcomeScreenSignedInUser`;
+  const guestSignUpHref = `${plusLandingPage}/plus?utm_source=excalidraw&utm_medium=app&utm_content=welcomeScreenGuest`;
   let headingContent;
 
   if (isExcalidrawPlusSignedUser) {
@@ -21,9 +25,7 @@ export const AppWelcomeScreen: React.FC<{
           return (
             <a
               style={{ pointerEvents: POINTER_EVENTS.inheritFromUI }}
-              href={`${
-                import.meta.env.VITE_APP_PLUS_APP
-              }?utm_source=excalidraw&utm_medium=app&utm_content=welcomeScreenSignedInUser`}
+              href={signedInHeadingHref}
               key={idx}
             >
               Excalidraw+
@@ -66,9 +68,7 @@ export const AppWelcomeScreen: React.FC<{
           )}
           {!isExcalidrawPlusSignedUser && (
             <WelcomeScreen.Center.MenuItemLink
-              href={`${
-                import.meta.env.VITE_APP_PLUS_LP
-              }/plus?utm_source=excalidraw&utm_medium=app&utm_content=welcomeScreenGuest`}
+              href={guestSignUpHref}
               shortcut={null}
               icon={loginIcon}
             >

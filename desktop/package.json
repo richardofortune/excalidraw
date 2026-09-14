@@ -1,0 +1,46 @@
+{
+  "name": "excalidraw-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Excalidraw desktop wrapper",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "EXCALIDRAW_DEV_URL=http://localhost:3001 electron .",
+    "build": "./build.sh"
+  },
+  "devDependencies": {
+    "electron": "44.3.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.richardfortune.excalidraw",
+    "productName": "Excalidraw",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "!**/node_modules/**"
+    ],
+    "extraResources": [
+      {
+        "from": "../excalidraw-app/build",
+        "to": "app"
+      }
+    ],
+    "fileAssociations": [
+      {
+        "ext": "excalidraw",
+        "name": "Excalidraw drawing",
+        "role": "Editor"
+      }
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "../public/android-chrome-512x512.png",
+      "category": "public.app-category.graphics-design"
+    }
+  }
+}

@@ -19,4 +19,5 @@ export {
   getNormalizedZoom,
   getNormalizedGridSize,
   getNormalizedGridStep,
+  getNormalizedGridStyle,
 } from "./normalize";

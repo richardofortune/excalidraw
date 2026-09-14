@@ -65,7 +65,7 @@ const GridLineColor = {
   },
 } as const;
 
-const strokeGrid = (
+const strokeLineGrid = (
   context: CanvasRenderingContext2D,
   /** grid cell pixel size */
   gridSize: number,
@@ -160,6 +160,121 @@ const strokeGrid = (
     context.stroke();
   }
   context.restore();
+};
+
+const strokePointGrid = (
+  context: CanvasRenderingContext2D,
+  gridSize: number,
+  gridStep: number,
+  gridStyle: "dots" | "crosses",
+  scrollX: number,
+  scrollY: number,
+  zoom: Zoom,
+  theme: StaticCanvasRenderConfig["theme"],
+  width: number,
+  height: number,
+) => {
+  const offsetX = (scrollX % gridSize) - gridSize;
+  const offsetY = (scrollY % gridSize) - gridSize;
+  const actualGridSize = gridSize * zoom.value;
+
+  context.save();
+
+  if (zoom.value === 1) {
+    context.translate(offsetX % 1 ? 0 : 0.5, offsetY % 1 ? 0 : 0.5);
+  }
+
+  const pointColor = GridLineColor[theme];
+
+  for (let x = offsetX; x < offsetX + width + gridSize * 2; x += gridSize) {
+    const isBold =
+      gridStep > 1 && Math.round(x - scrollX) % (gridStep * gridSize) === 0;
+    if (!isBold && actualGridSize < 10) {
+      continue;
+    }
+
+    for (let y = offsetY; y < offsetY + height + gridSize * 2; y += gridSize) {
+      const isBoldY =
+        gridStep > 1 && Math.round(y - scrollY) % (gridStep * gridSize) === 0;
+      const isMajorIntersection = isBold || isBoldY;
+      if (!isMajorIntersection && actualGridSize < 10) {
+        continue;
+      }
+
+      const strokeStyle = isMajorIntersection
+        ? pointColor.bold
+        : pointColor.regular;
+      const baseSize = gridStyle === "dots" ? 0.8 : 2;
+      const size = Math.min(
+        (isMajorIntersection ? baseSize * 2 : baseSize) / zoom.value,
+        actualGridSize / 3,
+      );
+
+      context.beginPath();
+      context.strokeStyle = strokeStyle;
+      context.fillStyle = strokeStyle;
+
+      if (gridStyle === "dots") {
+        context.arc(x, y, size, 0, Math.PI * 2);
+        context.fill();
+      } else {
+        context.lineWidth = Math.min(
+          (isMajorIntersection ? 1.5 : 1) / zoom.value,
+          size,
+        );
+        context.moveTo(x - size, y);
+        context.lineTo(x + size, y);
+        context.moveTo(x, y - size);
+        context.lineTo(x, y + size);
+        context.stroke();
+      }
+    }
+  }
+
+  context.restore();
+};
+
+const strokeGrid = (
+  context: CanvasRenderingContext2D,
+  gridSize: number,
+  gridStep: number,
+  gridStyle: StaticCanvasAppState["gridStyle"],
+  scrollX: number,
+  scrollY: number,
+  zoom: Zoom,
+  theme: StaticCanvasRenderConfig["theme"],
+  width: number,
+  height: number,
+  scale: number,
+) => {
+  if (gridStyle === "dots" || gridStyle === "crosses") {
+    strokePointGrid(
+      context,
+      gridSize,
+      gridStep,
+      gridStyle,
+      scrollX,
+      scrollY,
+      zoom,
+      theme,
+      width,
+      height,
+    );
+    return;
+  }
+
+  strokeLineGrid(
+    context,
+    gridSize,
+    gridStep,
+    scrollX,
+    scrollY,
+    zoom,
+    theme,
+    width,
+    height,
+    scale,
+  );
 };
 
 export const frameClip = (
@@ -315,6 +430,7 @@ const _renderStaticScene = ({
       context,
       appState.gridSize,
       appState.gridStep,
+      appState.gridStyle,
       appState.scrollX,
       appState.scrollY,
       appState.zoom,

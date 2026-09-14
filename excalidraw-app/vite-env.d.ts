@@ -47,3 +47,14 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// injected by `define` in vite.config.mts. Null when git wasn't available at
+// build time, and undefined outside of a vite build (e.g. under vitest).
+declare const __FORK_GIT_INFO__: {
+  sha: string;
+  branch: string;
+  base: string | null;
+  ahead: number;
+  behind: number;
+  dirty: boolean;
+} | null;

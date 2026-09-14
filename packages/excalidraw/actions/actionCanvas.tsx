@@ -114,6 +114,7 @@ export const actionClearCanvas = register({
         exportEmbedScene: appState.exportEmbedScene,
         gridSize: appState.gridSize,
         gridStep: appState.gridStep,
+        gridStyle: appState.gridStyle,
         gridModeEnabled: appState.gridModeEnabled,
         stats: appState.stats,
         colorTopPicks: appState.colorTopPicks,
@@ -177,6 +178,7 @@ export const actionNewScene = register({
         exportEmbedScene: appState.exportEmbedScene,
         gridSize: appState.gridSize,
         gridStep: appState.gridStep,
+        gridStyle: appState.gridStyle,
         gridModeEnabled: appState.gridModeEnabled,
         stats: appState.stats,
         activeTool:
@@ -190,7 +192,8 @@ export const actionNewScene = register({
       captureUpdate: CaptureUpdateAction.IMMEDIATELY,
     };
   },
-  keyTest: (event) => event[KEYS.CTRL_OR_CMD] && event.key.toLowerCase() === "n",
+  keyTest: (event) =>
+    event[KEYS.CTRL_OR_CMD] && event.key.toLowerCase() === "n",
 });
 
 export const actionZoomIn = register({

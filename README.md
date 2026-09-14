@@ -5,24 +5,58 @@
   </picture>
 </a>
 
+## About this fork
+
+This is a convenience fork of [excalidraw/excalidraw](https://github.com/excalidraw/excalidraw), maintained by Richard Fortune for personal use. It exists so I can add the features I want without asking the upstream project to change. Nothing here is intended as a contribution back, and none of it is supported by the Excalidraw team. If you want the real thing, use [excalidraw.com](https://excalidraw.com) or the upstream repo.
+
+Upstream is tracked as the `upstream` git remote. Fork changes are kept as a small set of commits on top of `upstream/master` and rebased periodically. The in-app version label (hamburger menu) shows how far the running build has drifted from upstream, e.g. `v1.0.0 · master +1 −100*`.
+
+### What is different
+
+**Recent Files panel.** Saving, opening, or creating a file snapshots the current scene into a "Recent Files" list in localStorage. A "Recent Files" entry in the hamburger menu shows each file with a relative timestamp. Clicking one reopens it after auto-saving your current work. Entries can be dismissed individually or cleared together.
+
+**New File action (`Ctrl/Cmd + N`).** Creates a blank canvas, asking for confirmation if the current canvas has content, and auto-saves the current scene to Recent Files first. Also available as a "New File" item at the top of the hamburger menu.
+
+**Restructured hamburger menu.** New File and Recent Files sit in the top (file operations) section. The social and community links (GitHub, X, Discord, Excalidraw+, Sign in) are collapsed into an icon bar at the bottom of the menu.
+
+**Grid style selector.** A preference under Settings → Grid to choose between the original crosshatch lines, dots at intersections, or small crosses. The style scales with zoom and is saved with the scene.
+
+**Zoom-to-fit button.** A visible "Fit" button in the zoom controls bar.
+
+**Type straight into a new shape.** Drawing a rectangle, ellipse, or diamond drops you into text editing inside it immediately, without pressing Enter or double-clicking first.
+
+**Fork version label.** The hamburger menu shows the fork version plus the git branch, ahead/behind count against upstream, and a dirty marker, resolved at build time in `excalidraw-app/vite.config.mts`.
+
+**macOS desktop app.** `desktop/` is an Electron wrapper around the `excalidraw-app` build with native open of `.excalidraw` files from Finder. See [desktop/README.md](desktop/README.md).
+
+**Homelab deployment.** `docker-compose.homelab.yml` serves a prebuilt bundle from nginx behind Traefik. `run.sh` starts the dev server on port 3001.
+
+---
+
 ## 🚀 Quick Launch (Local Development)
 
 To run Excalidraw locally:
 
 1. **Clone the repository:**
-  ```sh
-  git clone https://github.com/excalidraw/excalidraw.git
-  cd excalidraw
-  ```
+
+```sh
+git clone https://github.com/richardofortune/excalidraw.git
+cd excalidraw
+```
+
 2. **Install dependencies:**
-  ```sh
-  yarn install
-  ```
+
+```sh
+yarn install
+```
+
 3. **Start the app:**
-  ```sh
-  yarn start
-  ```
-  This launches the local development server (usually at http://localhost:3000).
+
+```sh
+yarn start
+```
+
+This launches the local development server (usually at http://localhost:3000).
 
 **To run the full-featured app (excalidraw.com clone):**
 
@@ -31,6 +65,7 @@ cd excalidraw-app
 yarn install
 yarn start
 ```
+
 Then open http://localhost:3000 in your browser.
 
 For more details, see the [Development Guide](https://docs.excalidraw.com/docs/introduction/development).

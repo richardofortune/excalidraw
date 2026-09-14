@@ -23,10 +23,8 @@
       "id": "large-codebase-footprint",
       "family": "llm_friction",
       "title": "Large codebase token footprint",
-      "detail": "~2,287,059 estimated tokens across 714 source files. Multi-file tasks will pressure the context window.",
-      "evidence": [
-        "~2,287,059 tokens (181,542 code lines)"
-      ],
+      "detail": "~2,302,986 estimated tokens across 718 source files. Multi-file tasks will pressure the context window.",
+      "evidence": ["~2,302,986 tokens (182,708 code lines)"],
       "points": 10,
       "priority": 2,
       "confidence": "medium"
@@ -35,7 +33,7 @@
       "id": "high-file-count",
       "family": "llm_friction",
       "title": "High source file count",
-      "detail": "714 source files. An LLM resolving a cross-cutting change may need to load dozens of files to build sufficient context.",
+      "detail": "718 source files. An LLM resolving a cross-cutting change may need to load dozens of files to build sufficient context.",
       "evidence": [],
       "points": 10,
       "priority": 2,
@@ -46,10 +44,7 @@
       "family": "process_theatre",
       "title": "Agent scaffolding sprawl",
       "detail": "2 AI context files coexist \u2014 consolidate to one.",
-      "evidence": [
-        "CLAUDE.md",
-        ".github/copilot-instructions.md"
-      ],
+      "evidence": ["CLAUDE.md", ".github/copilot-instructions.md"],
       "points": 8,
       "priority": 1,
       "confidence": "high"
@@ -59,10 +54,7 @@
       "family": "operational_clutter",
       "title": "Competing package lock files",
       "detail": "Multiple lock files found: package-lock.json, yarn.lock",
-      "evidence": [
-        "package-lock.json",
-        "yarn.lock"
-      ],
+      "evidence": ["package-lock.json", "yarn.lock"],
       "points": 6,
       "priority": 2,
       "confidence": "high"
@@ -111,12 +103,12 @@
   },
   "meta": {
     "path": "/Users/mrfortune/Documents/github/excalidraw",
-    "scanned_at": "2026-05-13T10:59:38Z",
-    "git_commit": "2dfcc6f0",
-    "source_files": 714,
-    "test_files": 144,
-    "code_lines": 181542,
-    "doc_lines": 7237,
-    "estimated_tokens": 2287059
+    "scanned_at": "2026-09-01T22:10:14Z",
+    "git_commit": "c84df305",
+    "source_files": 718,
+    "test_files": 145,
+    "code_lines": 182708,
+    "doc_lines": 7366,
+    "estimated_tokens": 2302986
   }
 }

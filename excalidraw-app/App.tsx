@@ -557,6 +557,32 @@ const ExcalidrawWrapper = () => {
     [collabAPI, excalidrawAPI],
   );
 
+  // .excalidraw file opened via the desktop app (double-click / Finder)
+  useEffect(() => {
+    if (!excalidrawAPI || !window.desktop) {
+      return;
+    }
+    return window.desktop.onOpenFile(async ({ name, contents }) => {
+      try {
+        const data = await loadFromBlob(
+          new File([contents], name),
+          excalidrawAPI.getAppState(),
+          excalidrawAPI.getSceneElements(),
+        );
+        excalidrawAPI.updateScene({
+          elements: data.elements,
+          appState: data.appState,
+          captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+        });
+        if (data.files) {
+          excalidrawAPI.addFiles(Object.values(data.files));
+        }
+      } catch (error: any) {
+        excalidrawAPI.setToast({ message: error.message });
+      }
+    });
+  }, [excalidrawAPI]);
+
   useEffect(() => {
     if (!excalidrawAPI || (!isCollabDisabled && !collabAPI)) {
       return;

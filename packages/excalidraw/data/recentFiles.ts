@@ -8,12 +8,14 @@ import { getNonDeletedElements } from "@excalidraw/element";
 
 import { createStore, del, get, set } from "idb-keyval";
 
+import type { ExcalidrawElement } from "@excalidraw/element/types";
+
+import { atom, editorJotaiStore } from "../editor-jotai";
+
 import { EditorLocalStorage } from "./EditorLocalStorage";
 import { loadFromBlob } from "./blob";
 import { serializeAsJSON } from "./json";
-import { atom, editorJotaiStore } from "../editor-jotai";
 
-import type { ExcalidrawElement } from "@excalidraw/element/types";
 import type { AppState, BinaryFiles } from "../types";
 
 export const DEFAULT_RECENT_FILES_LIMIT = 8;
@@ -114,10 +116,10 @@ const getNextRecentFiles = (
   nextFile: RecentFile,
   limit = DEFAULT_RECENT_FILES_LIMIT,
 ) => {
-  return [nextFile, ...currentFiles.filter((file) => file.id !== nextFile.id)].slice(
-    0,
-    limit,
-  );
+  return [
+    nextFile,
+    ...currentFiles.filter((file) => file.id !== nextFile.id),
+  ].slice(0, limit);
 };
 
 const loadRecentFiles = () =>
@@ -197,11 +199,15 @@ export const backupCurrentSceneToRecentFiles = async ({
   persistRecentFiles(nextRecentFiles);
 
   const evictedFiles = recentFiles
-    .filter((file) => !nextRecentFiles.some((nextFile) => nextFile.id === file.id))
+    .filter(
+      (file) => !nextRecentFiles.some((nextFile) => nextFile.id === file.id),
+    )
     .map((file) => file.id);
 
   if (evictedFiles.length) {
-    await Promise.all(evictedFiles.map((fileId) => del(fileId, recentFilesStore)));
+    await Promise.all(
+      evictedFiles.map((fileId) => del(fileId, recentFilesStore)),
+    );
   }
 
   return nextRecentFiles[0];
