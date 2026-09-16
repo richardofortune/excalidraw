@@ -17,6 +17,7 @@
   "caption": {
     "preset": "karaoke",
     "dimOpacity": 72,
+    "sweepDelay": 0.25,
     "highlightColor": "#FFD400",
     "position": "bottom-center",
     "height": 62,
