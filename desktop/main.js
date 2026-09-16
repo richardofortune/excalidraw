@@ -5,11 +5,15 @@ const { pathToFileURL } = require("url");
 const {
   app,
   BrowserWindow,
+  Menu,
+  dialog,
   protocol,
   net,
   ipcMain,
   shell,
 } = require("electron");
+
+const FORK_URL = "https://github.com/richardofortune/excalidraw";
 
 const BUILD_DIR = app.isPackaged
   ? path.join(process.resourcesPath, "app")
@@ -66,21 +70,47 @@ app.on("open-file", (event, filePath) => {
   openFile(filePath);
 });
 
+// The About panel is a small fixed box that only renders plain text, so it
+// gets the one-liner. The update steps live under Help, where a dialog can
+// give them a title and a body.
 app.setAboutPanelOptions({
   applicationName: "Excalidraw",
   applicationVersion: app.getVersion(),
-  credits: [
-    "A self-built desktop wrapper around a personal fork of Excalidraw.",
-    "",
-    "To update:",
-    "1. Pull the fork and bump the version in desktop/package.json",
-    "2. Run ./desktop/build.sh",
-    "3. Open the new dmg and replace the app in Applications",
-    "",
-    "Drawings are kept outside the app bundle and survive the replace.",
-  ].join("\n"),
-  website: "https://github.com/excalidraw/excalidraw",
+  copyright: "A personal fork of excalidraw/excalidraw, wrapped for macOS",
 });
+
+const showUpdateHelp = () =>
+  dialog.showMessageBox({
+    type: "info",
+    title: "Updating Excalidraw",
+    message: "There is no auto-update. To install a new version:",
+    detail: [
+      "1. Pull the fork and bump the version in desktop/package.json.",
+      "2. Run ./desktop/build.sh.",
+      "3. Open the new dmg and replace the app in Applications.",
+      "",
+      "Drawings are kept outside the app bundle and survive the replace.",
+    ].join("\n"),
+  });
+
+// Setting a menu replaces Electron's default, so the standard roles are
+// listed to keep copy, paste, zoom and friends working.
+Menu.setApplicationMenu(
+  Menu.buildFromTemplate([
+    { role: "appMenu" },
+    { role: "fileMenu" },
+    { role: "editMenu" },
+    { role: "viewMenu" },
+    { role: "windowMenu" },
+    {
+      role: "help",
+      submenu: [
+        { label: "How to Update\u2026", click: showUpdateHelp },
+        { label: "Fork on GitHub", click: () => shell.openExternal(FORK_URL) },
+      ],
+    },
+  ]),
+);
 
 app.whenReady().then(() => {
   protocol.handle("app", (request) => {

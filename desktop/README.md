@@ -14,7 +14,7 @@ The app is signed with a local development certificate, not notarised. If macOS 
 
 ## Updating an installed copy
 
-There is no auto-update. To ship a new version:
+There is no auto-update. The steps below are also under Help → How to Update in the app, and Help → Fork on GitHub opens the repo. To ship a new version:
 
 1. Bump `version` in `desktop/package.json` so the dmg filename and the About box change.
 2. Run `./desktop/build.sh` on a machine with the repo checked out.
