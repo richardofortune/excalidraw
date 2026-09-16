@@ -2,7 +2,7 @@
   "title": "Excalidraw, forked",
   "slug": "excalidraw-fork",
 
-  "$comment": "Walkthrough of what this fork adds on top of upstream Excalidraw. One short working session: draw, tidy the canvas, lose the drawing, get it back. Films the dev server from run.sh. Captions stay up until the next one replaces them, so every caption comes before the action it describes. Refilm after any rebase: nolan lint, then nolan demo/fork.screenplay.json --style=demo/fork.style.json --out=demo/out (add --cut=hero for the short one).",
+  "$comment": "Walkthrough of what this fork adds on top of upstream Excalidraw. One short working session: draw, tidy the canvas, lose the drawing, get it back. Films the dev server from run.sh. Captions stay up until the next one replaces them, so every caption comes before the action it describes. Refilm after any rebase: nolan lint, then nolan demo/fork.screenplay.json --style=demo/fork.style.json --out=demo/out (add --cut=hero for the short one). The render runs nolan flashcheck over each output; a flash line means something leaked between two overlays",
 
   "cuts": { "full": { "pace": 1 }, "hero": { "pace": 0.85 } },
 
