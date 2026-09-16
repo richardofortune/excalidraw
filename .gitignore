@@ -27,3 +27,6 @@ dev-dist
 html
 meta*.json
 .claude
+
+# nolan renders, refilm with demo/fork.screenplay.json
+demo/out

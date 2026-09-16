@@ -1,0 +1,54 @@
+{
+  "$comment": "Look for the fork walkthrough. Excalidraw purple for the chip and curtain, wide viewport so the toolbar and menu fit.",
+
+  "pace": 1,
+
+  "timing": {
+    "mode": "caption",
+    "readingSpeed": 28,
+    "minCaption": 1600,
+    "leadIn": 350,
+    "beatOut": 600,
+    "typeDelay": 60,
+    "glideDefault": 650,
+    "settle": 250
+  },
+
+  "caption": {
+    "preset": "karaoke",
+    "dimOpacity": 72,
+    "highlightColor": "#FFD400",
+    "position": "bottom-center",
+    "height": 62,
+    "padding": "14px 24px",
+    "font": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif",
+    "fontWeight": 500,
+    "size": 19,
+    "lineHeight": 1.35,
+    "color": "#F2F3F5",
+    "backgroundColor": "#1b1b1f",
+    "backgroundOpacity": 94,
+    "showChip": true
+  },
+
+  "presenter": { "show": false },
+
+  "cursor": {
+    "show": true,
+    "size": 22,
+    "fill": "#1b1b1f",
+    "stroke": "#ffffff",
+    "click": { "show": true, "colour": "#6965db", "from": 14, "to": 62, "ms": 520, "width": 3, "dot": true, "dotTo": 34, "rings": 2 }
+  },
+
+  "transition": { "curtain": "#6965db", "fadeMs": 340, "titleFont": "700 30px -apple-system,Roboto,sans-serif", "titleInk": "#ffffff" },
+
+  "encode": {
+    "viewport": { "width": 1200, "height": 760 },
+    "subtitles": ["srt", "vtt"],
+    "outputs": [
+      { "name": "gif", "ext": "gif", "args": "-vf \"fps=13,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=160[p];[b][p]paletteuse=dither=bayer:bayer_scale=4\" -loop 0" },
+      { "name": "mp4", "ext": "mp4", "args": "-vf \"scale=1200:-2\" -c:v libx264 -pix_fmt yuv420p -crf 23 -movflags +faststart" }
+    ]
+  }
+}

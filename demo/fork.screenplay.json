@@ -1,0 +1,114 @@
+{
+  "title": "Excalidraw, forked",
+  "slug": "excalidraw-fork",
+
+  "$comment": "Walkthrough of what this fork adds on top of upstream Excalidraw. One short working session: draw, tidy the canvas, lose the drawing, get it back. Films the dev server from run.sh. Captions stay up until the next one replaces them, so every caption comes before the action it describes. Refilm after any rebase: nolan lint, then nolan demo/fork.screenplay.json --style=demo/fork.style.json --out=demo/out (add --cut=hero for the short one).",
+
+  "cuts": { "full": { "pace": 1 }, "hero": { "pace": 0.85 } },
+
+  "cast": {
+    "richard": { "kind": "human", "name": "Richard", "bg": "#6965db", "ink": "#fff", "role": "forked it" }
+  },
+
+  "vars": {
+    "app": "http://localhost:3055/",
+    "boxText": "Plan the week"
+  },
+
+  "set": {
+    "servers": [{ "cmd": "./run.sh", "args": ["--port", "3055"], "cwd": ".." }],
+    "waitFor": ["http://localhost:3055/"],
+    "$initScript": "keeps the zoom bar clear of the 62px caption strip the style paints along the bottom",
+    "initScript": "document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = '#root { height: calc(100% - 62px) !important; }'; document.head.appendChild(s); })"
+  },
+
+  "scenes": [
+    {
+      "id": "open",
+      "beats": [
+        { "do": "cut", "url": "{{app}}", "title": "Excalidraw, forked", "ms": 2200, "settle": 1200 },
+        { "do": "actor", "who": "richard" },
+        { "do": "say", "text": "A few things I wanted that upstream Excalidraw doesn't do.", "cuts": ["full"] },
+        { "do": "hold", "ms": 700, "cuts": ["full"] }
+      ]
+    },
+    {
+      "id": "draw",
+      "beats": [
+        { "do": "say", "text": "Draw a box and the cursor is already inside it, ready to type." },
+        { "do": "js", "code": "window.h.app.setActiveTool({ type: 'rectangle' })" },
+        { "do": "drag", "from": { "x": 420, "y": 250 }, "to": { "x": 780, "y": 430 }, "ms": 500, "dragMs": 800 },
+        { "do": "hold", "ms": 500 },
+        { "do": "type", "text": "{{boxText}}", "delay": 70 },
+        { "do": "hold", "ms": 900 },
+        { "do": "click", "to": { "x": 300, "y": 600 }, "ms": 500 },
+        { "do": "hold", "ms": 800 }
+      ]
+    },
+    {
+      "id": "grid",
+      "cuts": ["full"],
+      "beats": [
+        { "do": "say", "text": "The grid comes in three styles now, so pick the one you like." },
+        { "do": "click", "to": { "sel": "[data-testid=main-menu-trigger]" }, "ms": 600 },
+        { "do": "click", "to": { "role": "menuitem", "name": "Preferences" }, "ms": 600, "settle": 500 },
+        { "do": "click", "to": { "role": "menuitem", "name": "Toggle grid" }, "ms": 600, "settle": 700 },
+        { "do": "click", "to": { "role": "radio", "name": "Dots" }, "ms": 600, "settle": 1300 },
+        { "do": "click", "to": { "role": "radio", "name": "Crosses" }, "ms": 500, "settle": 500 },
+        { "do": "js", "code": "document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))", "settle": 500 },
+        { "do": "hold", "ms": 800 },
+        { "do": "say", "text": "The style is saved in the drawing, so reload the page and check." },
+        { "do": "cut", "url": "{{app}}", "title": "Reloading the page", "ms": 1100, "settle": 900 },
+        { "do": "say", "text": "The crosses are still there, because the style lives in the file." },
+        { "do": "hold", "ms": 900 }
+      ]
+    },
+    {
+      "id": "fit",
+      "cuts": ["full"],
+      "beats": [
+        { "do": "say", "text": "Zoom out far enough and the drawing vanishes into the canvas." },
+        { "do": "js", "code": "window.h.app.setState({ zoom: { value: 0.1 }, scrollX: 6000, scrollY: 4000 })", "settle": 1400 },
+        { "do": "say", "text": "One click on Fit and it's back in view." },
+        { "do": "click", "to": { "role": "button", "name": "Zoom to fit all elements" }, "ms": 700, "settle": 700 },
+        { "do": "hold", "ms": 1400 }
+      ]
+    },
+    {
+      "id": "recent",
+      "beats": [
+        { "do": "say", "text": "New file clears the canvas and parks the old drawing in Recent files." },
+        { "do": "click", "to": { "sel": "[data-testid=main-menu-trigger]" }, "ms": 600 },
+        { "do": "click", "to": { "sel": "[data-testid=new-file-button]" }, "ms": 600, "settle": 1200 },
+        { "do": "click", "to": { "role": "button", "name": "Create new file" }, "ms": 700, "settle": 600 },
+        { "do": "hold", "ms": 1200 },
+
+        { "do": "say", "text": "Open Recent files and it's waiting there, stamped with the time." },
+        { "do": "click", "to": { "sel": "[data-testid=main-menu-trigger]" }, "ms": 600 },
+        { "do": "click", "to": { "role": "menuitem", "name": "Recent files" }, "ms": 600, "settle": 600 },
+        { "do": "hold", "ms": 1400 },
+
+        { "do": "say", "text": "One click and you're back where you left it." },
+        { "do": "click", "to": { "sel": ".RecentFilesPanel__itemButton" }, "ms": 700, "settle": 700 },
+        { "do": "hold", "ms": 2000 }
+      ]
+    },
+    {
+      "id": "close",
+      "cuts": ["full"],
+      "beats": [
+        {
+          "do": "js",
+          "$comment": "Closing cards as one overlay that swaps its text. Two nolan cards in a row fade out to the app between them; this never does, and the film ends on it.",
+          "code": "const c = document.createElement('div'); c.id = 'fork-outro'; c.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:#6965db;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:0 60px;opacity:0;transition:opacity 340ms'; c.innerHTML = '<div style=\"font:700 34px -apple-system,Roboto,sans-serif\">It\u2019s a Mac app too</div><div style=\"font:400 19px -apple-system,sans-serif;opacity:.72\">Double-click any .excalidraw file and it opens here</div>'; document.body.appendChild(c); requestAnimationFrame(() => (c.style.opacity = '1'));",
+          "settle": 3600
+        },
+        {
+          "do": "js",
+          "code": "const c = document.getElementById('fork-outro'); const inner = c.firstElementChild; c.style.transition = 'none'; [...c.children].forEach((el) => { el.style.transition = 'opacity 260ms'; el.style.opacity = '0'; }); setTimeout(() => { c.innerHTML = '<div style=\"font:500 24px ui-monospace,Menlo,monospace;opacity:0;transition:opacity 260ms\">github.com/richardofortune/excalidraw</div>'; requestAnimationFrame(() => (c.firstElementChild.style.opacity = '1')); }, 280);",
+          "settle": 2800
+        }
+      ]
+    }
+  ]
+}
