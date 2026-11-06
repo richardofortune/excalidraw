@@ -326,6 +326,7 @@ function CommandPaletteInner({
         actionManager.actions.alignRight,
         actionManager.actions.alignVerticallyCentered,
         actionManager.actions.alignHorizontallyCentered,
+        actionManager.actions.transpose,
         actionManager.actions.duplicateSelection,
         actionManager.actions.flipHorizontal,
         actionManager.actions.flipVertical,

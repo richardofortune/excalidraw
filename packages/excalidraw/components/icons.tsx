@@ -915,6 +915,22 @@ export const DistributeVerticallyIcon = createIcon(
   modifiedTablerIconProps,
 );
 
+export const TransposeIcon = createIcon(
+  <g stroke="currentColor" strokeWidth="1.25">
+    <rect x="2.5" y="2.5" width="4" height="4" rx="1" />
+    <rect x="2.5" y="8" width="4" height="4" rx="1" />
+    <rect x="2.5" y="13.5" width="4" height="4" rx="1" />
+    <rect x="8" y="13.5" width="4" height="4" rx="1" />
+    <rect x="13.5" y="13.5" width="4" height="4" rx="1" />
+    <path
+      d="M9 4.5a7 7 0 0 1 6.5 6.5M13.5 9.5l2 1.5 1.5-2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </g>,
+  modifiedTablerIconProps,
+);
+
 export const CenterVerticallyIcon = createIcon(
   <g stroke="currentColor" strokeWidth="1.25">
     <path d="M1.667 10h2.916" strokeLinecap="round" strokeLinejoin="round" />

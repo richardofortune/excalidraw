@@ -37,6 +37,7 @@ export type ShortcutName =
       | "viewMode"
       | "flipHorizontal"
       | "flipVertical"
+      | "transpose"
       | "hyperlink"
       | "toggleElementLock"
       | "resetZoom"
@@ -100,6 +101,7 @@ const shortcutMap: Record<ShortcutName, string[]> = {
   addToLibrary: [],
   flipHorizontal: [getShortcutKey("Shift+H")],
   flipVertical: [getShortcutKey("Shift+V")],
+  transpose: [getShortcutKey("Alt+T")],
   viewMode: [getShortcutKey("Alt+R")],
   hyperlink: [getShortcutKey("CtrlOrCmd+K")],
   toggleElementLock: [getShortcutKey("CtrlOrCmd+Shift+L")],

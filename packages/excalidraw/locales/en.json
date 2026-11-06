@@ -133,6 +133,7 @@
     "centerHorizontally": "Center horizontally",
     "distributeHorizontally": "Distribute horizontally",
     "distributeVertically": "Distribute vertically",
+    "transpose": "Swap column and row",
     "flipHorizontal": "Flip horizontal",
     "flipVertical": "Flip vertical",
     "viewMode": "View mode",

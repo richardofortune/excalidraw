@@ -68,6 +68,8 @@ export {
   distributeVertically,
 } from "./actionDistribute";
 
+export { actionTranspose } from "./actionTranspose";
+
 export { actionFlipHorizontal, actionFlipVertical } from "./actionFlip";
 
 export {

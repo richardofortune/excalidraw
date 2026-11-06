@@ -114,6 +114,7 @@ export type ActionName =
   | "alignHorizontallyCentered"
   | "distributeHorizontally"
   | "distributeVertically"
+  | "transpose"
   | "flipHorizontal"
   | "flipVertical"
   | "deselect"
