@@ -7,5 +7,6 @@ command -v yarn >/dev/null || source "${NVM_DIR:-$HOME/.nvm}/nvm.sh"
 
 (cd .. && yarn build:app:docker)
 [ -d node_modules ] || yarn install
+./quicklook/build.sh
 yarn electron-builder --mac dmg
 echo "Built: $(ls dist/*.dmg)"

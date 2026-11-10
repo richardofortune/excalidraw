@@ -18,6 +18,8 @@ export interface ExportedDataState {
   elements: readonly ExcalidrawElement[];
   appState: ReturnType<typeof cleanAppStateForExport>;
   files: BinaryFiles | undefined;
+  /** Preview image as a data URL, read by the macOS Quick Look extension. */
+  thumbnail?: string;
 }
 
 /**

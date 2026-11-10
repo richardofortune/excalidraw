@@ -5,11 +5,14 @@ import {
   VERSIONS,
 } from "@excalidraw/common";
 
+import { getNonDeletedElements } from "@excalidraw/element";
+
 import type { ExcalidrawElement } from "@excalidraw/element/types";
 
 import type { MaybePromise } from "@excalidraw/common/utility-types";
 
 import { cleanAppStateForExport, clearAppStateForDatabase } from "../appState";
+import { exportToCanvas } from "../scene/export";
 
 import { isImageFileHandle, loadFromBlob } from "./blob";
 import { fileOpen, fileSave } from "./filesystem";
@@ -54,6 +57,7 @@ export const serializeAsJSON = (
   appState: Partial<AppState>,
   files: BinaryFiles,
   type: "local" | "database",
+  thumbnail?: string,
 ): string => {
   const data: ExportedDataState = {
     type: EXPORT_DATA_TYPES.excalidraw,
@@ -69,9 +73,51 @@ export const serializeAsJSON = (
         ? filterOutDeletedFiles(elements, files)
         : // will be stripped from JSON
           undefined,
+    thumbnail,
   };
 
   return JSON.stringify(data, null, 2);
+};
+
+const THUMBNAIL_MAX_SIZE = 1024;
+
+/**
+ * A preview image stored in the saved file so the macOS desktop app's Quick
+ * Look extensions can show it as the Finder icon and the Space-bar preview. Loading ignores the field.
+ * Returns undefined rather than failing, so a broken preview never blocks a
+ * save.
+ */
+const renderThumbnail = async ({
+  elements,
+  appState,
+  files,
+}: JSONExportData): Promise<string | undefined> => {
+  const visible = getNonDeletedElements(elements);
+  if (!visible.length) {
+    return undefined;
+  }
+  try {
+    const canvas = await exportToCanvas(
+      visible,
+      { ...appState, exportWithDarkMode: false },
+      files,
+      {
+        exportBackground: true,
+        viewBackgroundColor: appState.viewBackgroundColor,
+      },
+      (width, height) => {
+        const scale = Math.min(2, THUMBNAIL_MAX_SIZE / Math.max(width, height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(width * scale);
+        canvas.height = Math.round(height * scale);
+        return { canvas, scale };
+      },
+    );
+    return canvas.toDataURL("image/webp", 0.8);
+  } catch (error) {
+    console.warn("Could not render file thumbnail", error);
+    return undefined;
+  }
 };
 
 export const saveAsJSON = async ({
@@ -83,8 +129,14 @@ export const saveAsJSON = async ({
   filename: string;
   fileHandle: AppState["fileHandle"];
 }) => {
-  const blob = Promise.resolve(data).then(({ elements, appState, files }) => {
-    const serialized = serializeAsJSON(elements, appState, files, "local");
+  const blob = Promise.resolve(data).then(async (data) => {
+    const serialized = serializeAsJSON(
+      data.elements,
+      data.appState,
+      data.files,
+      "local",
+      await renderThumbnail(data),
+    );
     return new Blob([serialized], {
       type: MIME_TYPES.excalidraw,
     });

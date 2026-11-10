@@ -1,3 +1,4 @@
+const { execFile } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const { pathToFileURL } = require("url");
@@ -131,6 +132,20 @@ app.whenReady().then(() => {
       pendingFile = null;
     }
   });
+
+  // macOS installs Quick Look extensions switched off. Turn on the ones that
+  // draw .excalidraw Finder icons and Space-bar previews; failure only means
+  // generic icons and no preview.
+  if (app.isPackaged) {
+    for (const id of ["thumbnail", "preview"]) {
+      execFile("pluginkit", [
+        "-e",
+        "use",
+        "-i",
+        `com.richardfortune.excalidraw.${id}`,
+      ]);
+    }
+  }
 
   createWindow();
   app.on("activate", () => {

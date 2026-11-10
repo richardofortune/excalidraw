@@ -30,17 +30,51 @@
         "to": "app"
       }
     ],
-    "fileAssociations": [
-      {
-        "ext": "excalidraw",
-        "name": "Excalidraw drawing",
-        "role": "Editor"
-      }
-    ],
     "mac": {
       "target": "dmg",
       "icon": "../public/android-chrome-512x512.png",
-      "category": "public.app-category.graphics-design"
+      "category": "public.app-category.graphics-design",
+      "extraFiles": [
+        {
+          "from": "quicklook/build/ExcalidrawThumbnail.appex",
+          "to": "PlugIns/ExcalidrawThumbnail.appex"
+        },
+        {
+          "from": "quicklook/build/ExcalidrawPreview.appex",
+          "to": "PlugIns/ExcalidrawPreview.appex"
+        }
+      ],
+      "signIgnore": [
+        "Excalidraw(Thumbnail|Preview)\\.appex"
+      ],
+      "extendInfo": {
+        "UTExportedTypeDeclarations": [
+          {
+            "UTTypeIdentifier": "com.richardfortune.excalidraw.drawing",
+            "UTTypeDescription": "Excalidraw drawing",
+            "UTTypeConformsTo": [
+              "public.json",
+              "public.data"
+            ],
+            "UTTypeTagSpecification": {
+              "public.filename-extension": [
+                "excalidraw"
+              ]
+            }
+          }
+        ],
+        "CFBundleDocumentTypes": [
+          {
+            "CFBundleTypeName": "Excalidraw drawing",
+            "CFBundleTypeRole": "Editor",
+            "LSHandlerRank": "Owner",
+            "LSItemContentTypes": [
+              "com.richardfortune.excalidraw.drawing"
+            ],
+            "CFBundleTypeIconFile": "icon.icns"
+          }
+        ]
+      }
     }
   }
 }
